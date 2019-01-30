@@ -1,0 +1,19 @@
+{
+  "name": "dicebot",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "dependencies": {
+    "axios": "^0.18.0",
+    "discord.js": "^11.4.2",
+    "node-opus": "^0.3.1",
+    "nodemon": "^1.18.9",
+    "ytdl-core": "^0.29.1"
+  },
+  "devDependencies": {},
+  "scripts": {
+    "bot": "nodemon index.js"
+  },
+  "author": "",
+  "license": "ISC"
+}

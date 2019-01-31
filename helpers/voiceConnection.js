@@ -4,6 +4,8 @@ exports.join = (client, msg) => {
     if (vc) {
       vc.join().then((connection) => {
         resolve(connection);
+      }).catch((err) => {
+        reject(err);
       });
     } else {
       reject('You must be in a voice channel to use voice features');

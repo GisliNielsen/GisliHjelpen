@@ -51,6 +51,12 @@ function playSong(client, msg, song, connection) {
       return connection.disconnect();
     });
   });
+  dispatcher.on('error', (err) => {
+    collector.stop();
+    playing = false;
+    console.log(err);
+    return connection.disconnect();
+  })
 }
 
 function richEmbed(msg, song) {

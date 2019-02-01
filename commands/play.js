@@ -11,7 +11,9 @@ module.exports = (client, msg, args) => {
     addToQueue(client, msg, args)
     .then((queue) => {
       if (!playing) {
-        playSong(client, msg, queue[0], connection);
+        setTimeout(() => {
+          playSong(client, msg, queue[0], connection);
+        }, 100);
       }
     }).catch((err) => {
       msg.channel.send(err);
@@ -41,7 +43,9 @@ function playSong(client, msg, song, connection) {
     .then((queue) => {
       if (queue.length > 0) {
         playing = false;
-        playSong(client, msg, queue[0], connection);
+        setTimeout(() => {
+          playSong(client, msg, queue[0], connection);
+        }, 100);
       } else {
         msg.channel.send('No more songs in queue!');
         return connection.disconnect();

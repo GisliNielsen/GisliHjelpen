@@ -47,6 +47,7 @@ function playSong(client, msg, song, connection) {
           playSong(client, msg, queue[0], connection);
         }, 100);
       } else {
+        playing = false;
         msg.channel.send('No more songs in queue!');
         return connection.disconnect();
       }

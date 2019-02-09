@@ -39,15 +39,14 @@ function playSong(client, msg, song, connection) {
   });
   dispatcher.on('end', () => {
     collector.stop();
+    playing = false;
     shiftQueue(client, msg)
     .then((queue) => {
       if (queue.length > 0) {
-        playing = false;
         setTimeout(() => {
           playSong(client, msg, queue[0], connection);
         }, 100);
       } else {
-        playing = false;
         msg.channel.send('No more songs in queue!');
         return connection.disconnect();
       }

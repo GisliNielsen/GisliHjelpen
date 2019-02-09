@@ -5,6 +5,7 @@ const join = require('../commands/join');
 const leave = require('../commands/leave');
 const play = require('../commands/play');
 const queue = require('../commands/queue');
+const purge = require('../commands/purge');
 
 module.exports = (client, msg) => {
 	if (msg.content[0] !== prefix) { return; }
@@ -28,5 +29,8 @@ module.exports = (client, msg) => {
 	}
 	if (msg.content === `${prefix}queue`) {
 		queue(client, msg);
+	}
+	if (msg.content.startsWith(`${prefix}purge`)) {
+		purge(client, msg, args);
 	}
 }

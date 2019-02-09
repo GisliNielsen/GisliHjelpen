@@ -36,6 +36,20 @@ function playSong(client, msg, song, connection) {
       msg.channel.send('Skipped');
       dispatcher.end();
     }
+    if (msg.content.startsWith('!pause')) {
+      if (dispatcher.paused) {
+        return msg.channel.send('Cannot pause while I am already paused!');
+      }
+      msg.channel.send('Paused!');
+      dispatcher.pause();
+    }
+    if (msg.content.startsWith('!resume')) {
+      if (!dispatcher.paused) {
+        return msg.channel.send('Cannot resume while I am already playing!');
+      }
+      msg.channel.send('Resuming!');
+      dispatcher.resume();
+    }
   });
   dispatcher.on('end', () => {
     collector.stop();

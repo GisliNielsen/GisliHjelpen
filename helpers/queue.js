@@ -1,5 +1,6 @@
 const ytdl = require('ytdl-core');
 const axios = require('axios');
+const moment = require('moment');
 const token = require('../config.json').tokens.youtube;
 
 const queue = [];
@@ -46,11 +47,17 @@ exports.addToQueue = (client, msg, args) => {
     ytdl.getBasicInfo(song, (err, info) => {
       if (err) { return reject(err); }
       if ( queue[msg.guild.id] === undefined) { queue[msg.guild.id] = []}
+      let length;
+      if (info.length_seconds < 3600) {
+        length = moment.utc(info.length_seconds*1000).format('mm:ss')
+      } else {
+        length = moment.utc(info.length_seconds*1000).format('hh:mm:ss')
+      }
       queue[msg.guild.id].push({
         title: info.title,
         thumbnail: info.player_response.videoDetails.thumbnail.thumbnails[info.player_response.videoDetails.thumbnail.thumbnails.length - 1].url,
         requestee: msg.author.tag,
-        length: info.length_seconds,
+        length,
         url: song,
       });
       msg.channel.send(`🎺 ***${info.title}*** has been added to the queue by ***${msg.author.tag}***`);

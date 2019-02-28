@@ -23,3 +23,12 @@ exports.leave = (client, msg) => {
     return reject('🚧 I am not in a voice channel!');
   });
 }
+
+exports.stauts = (client, msg) => {
+  client.voiceConnections.map((vc) => {
+    if (msg.guild.id === vc.channel.guild.id) {
+      return true;
+      }
+    });
+    return false;
+}

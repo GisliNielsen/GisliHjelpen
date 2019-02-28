@@ -4,5 +4,9 @@
     "youtube": ""
   },
   "prefix": "!",
-  "ownerID": ""
+  "ownerID": "",
+  "server": {
+    "id": "",
+    "mainChannel": ""
+  }
 }

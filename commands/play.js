@@ -1,26 +1,26 @@
 const Discord = require('discord.js');
 const ytdl = require('ytdl-core');
-const { join } = require('../helpers/voiceConnection');
+const { join, leave, status } = require('../helpers/voiceConnection');
 const { addToQueue, shiftQueue } = require('../helpers/queue');
 
 let playing = false;
 
-module.exports = (client, msg, args) => {
-  join(client, msg)
-  .then((connection) => {
-    addToQueue(client, msg, args)
-    .then((queue) => {
-      if (!playing) {
-        setTimeout(() => {
-          playSong(client, msg, queue[0], connection);
-        }, 100);
-      }
-    }).catch((err) => {
-      msg.channel.send(err);
-    });
-  }).catch((err) => {
-    msg.channel.send(err);
-  });
+module.exports = async (client, msg, args) => {
+  try {
+    const connection = await join(client, msg);
+    const queue = await addToQueue(client, msg, args);
+    if (!playing) {
+      setTimeout(() => {
+        playSong(client, msg, queue[0], connection);
+      }, 100);
+    }
+  } catch (err) {
+    const vcstatus = await status(client, msg);
+    if (vcstatus) {
+      return await leave();
+    }
+    return msg.channel.send(err);
+  }
 }
 
 function playSong(client, msg, song, connection) {

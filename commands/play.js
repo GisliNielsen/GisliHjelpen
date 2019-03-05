@@ -1,5 +1,6 @@
 const Discord = require('discord.js');
 const ytdl = require('ytdl-core');
+const moment = require('moment');
 const { join, leave, status } = require('../helpers/voiceConnection');
 const { addToQueue, shiftQueue } = require('../helpers/queue');
 
@@ -49,6 +50,14 @@ function playSong(client, msg, song, connection) {
       }
       msg.channel.send('Resuming!');
       dispatcher.resume();
+    }
+    if (msg.content.startsWith('!timeleft')) {
+      const remainingLengthSeconds = Math.floor(song.length_seconds - dispatcher.time / 1000);
+      let remainingLength = moment.utc(remainingLengthSeconds * 1000).format('mm:ss');
+      if (remainingLengthSeconds >= 60) {
+        length = moment.utc(remainingLengthSeconds * 1000).format('hh:mm:ss');
+      }
+      msg.channel.send(`Time remaining: [${remainingLength}]`)
     }
   });
   dispatcher.on('end', () => {

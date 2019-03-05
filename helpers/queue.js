@@ -58,6 +58,7 @@ exports.addToQueue = (client, msg, args) => {
         thumbnail: info.player_response.videoDetails.thumbnail.thumbnails[info.player_response.videoDetails.thumbnail.thumbnails.length - 1].url,
         requestee: msg.author.tag,
         length,
+        length_seconds: info.length_seconds,
         url: song,
       });
       msg.channel.send(`🎺 ***${info.title}*** has been added to the queue by ***${msg.author.tag}***`);

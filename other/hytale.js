@@ -7,10 +7,14 @@ function checkNews(client, isOnline, specialkidsonly) {
   axios.get('https://hytale.com/api/blog/post/published')
     .then((res) => {
       if (news !== res.data && news.length !== 0) {
-        const year = res.data[0].publishedAt.split('-')[0];
-        const month = res.data[0].publishedAt.split('-')[1];
-        const link = `https://hytale.com/news/${year}/${month}/${res.data[0].slug}`;
-        specialkidsonly.send(`Hytale har fått en ny nyhet! #Hypetale! 🔥\n${link}`);
+        try {
+          const year = res.data[0].publishedAt.split('-')[0];
+          const month = res.data[0].publishedAt.split('-')[1];
+          const link = `https://hytale.com/news/${year}/${month}/${res.data[0].slug}`;
+          specialkidsonly.send(`Hytale har fått en ny nyhet! #Hypetale! 🔥\n${link}`);
+        } catch (err) {
+          console.log(err);
+        }
       }
       if (isOnline) {
         news = res.data;

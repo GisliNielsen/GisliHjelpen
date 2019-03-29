@@ -20,18 +20,18 @@ module.exports = async (client, msg, args) => {
     if (vcstatus) {
       return await leave();
     }
-    return msg.channel.send(err);
+    return console.log(err);
   }
 }
 
 function playSong(client, msg, song, connection) {
   playing = true;
-  const stream = ytdl(song.url, { filter : 'audioonly' })
-  const dispatcher = connection.playStream(stream);
+  const stream = ytdl(song.url, { filter : 'audioonly' });
+  const dispatcher = connection.play(stream);
   
   richEmbed(msg, song);
 
-  let collector = msg.channel.createCollector(msg => msg);
+  let collector = msg.channel.createMessageCollector(msg => msg);
   collector.on('collect', msg => {
     if (msg.content.startsWith('!skip')) {
       msg.channel.send('Skipped');
@@ -87,12 +87,12 @@ function playSong(client, msg, song, connection) {
 }
 
 function richEmbed(msg, song) {
-  const embed = new Discord.RichEmbed()
+  const embed = new Discord.MessageEmbed()
     .setColor(3447003)
     .setAuthor(`Playing: ${song.title}`)
     .setDescription('Requested by: ** ' + song.requestee + '**' + '\n' + song.url)
     .setFooter('Song length: ' + song.length)
     .setImage(`${song.thumbnail}`)
-    .setTimestamp()
-    msg.channel.send({ embed });
+    .setTimestamp();
+  msg.channel.send(embed);
 }

@@ -1,5 +1,5 @@
 exports.join = (client, msg) => {
-  const vc = msg.member.voiceChannel;
+  const vc = msg.member.voice.channel;
   return new Promise((resolve, reject) => {
     if (vc) {
       vc.join().then((connection) => {
@@ -28,7 +28,7 @@ exports.stauts = (client, msg) => {
   client.voiceConnections.map((vc) => {
     if (msg.guild.id === vc.channel.guild.id) {
       return true;
-      }
-    });
-    return false;
+    }
+  });
+  return false;
 }

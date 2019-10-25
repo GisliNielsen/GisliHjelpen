@@ -3,6 +3,7 @@ const ytdl = require('ytdl-core');
 const moment = require('moment');
 const { join, leave, status } = require('../helpers/voiceConnection');
 const { addToQueue, shiftQueue } = require('../helpers/queue');
+const prefix = require('../config.json').prefix;
 
 let playing = false;
 
@@ -27,31 +28,32 @@ module.exports = async (client, msg, args) => {
 function playSong(client, msg, song, connection) {
   playing = true;
   const stream = ytdl(song.url, { filter : 'audioonly' });
-  const dispatcher = connection.play(stream);
+  client.user.setActivity(song.title, { type: 'LISTENING' })
+  const dispatcher = connection.playStream(stream);
   
   richEmbed(msg, song);
 
   let collector = msg.channel.createMessageCollector(msg => msg);
   collector.on('collect', msg => {
-    if (msg.content.startsWith('!skip')) {
+    if (msg.content.startsWith('#skip')) {
       msg.channel.send('Skipped');
       dispatcher.end();
     }
-    if (msg.content.startsWith('!pause')) {
+    if (msg.content.startsWith(`${prefix}pause`)) {
       if (dispatcher.paused) {
         return msg.channel.send('Cannot pause while I am already paused!');
       }
       msg.channel.send('Paused!');
       dispatcher.pause();
     }
-    if (msg.content.startsWith('!resume')) {
+    if (msg.content.startsWith(`${prefix}resume`)) {
       if (!dispatcher.paused) {
         return msg.channel.send('Cannot resume while I am already playing!');
       }
       msg.channel.send('Resuming!');
       dispatcher.resume();
     }
-    if (msg.content.startsWith('!timeleft')) {
+    if (msg.content.startsWith(`${prefix}timeleft`)) {
       const remainingLengthSeconds = Math.floor(song.length_seconds - dispatcher.time / 1000);
       let remainingLength = moment.utc(remainingLengthSeconds * 1000).format('mm:ss');
       if (remainingLengthSeconds >= 60) {
@@ -87,7 +89,7 @@ function playSong(client, msg, song, connection) {
 }
 
 function richEmbed(msg, song) {
-  const embed = new Discord.MessageEmbed()
+  const embed = new Discord.RichEmbed()
     .setColor(3447003)
     .setAuthor(`Playing: ${song.title}`)
     .setDescription('Requested by: ** ' + song.requestee + '**' + '\n' + song.url)
